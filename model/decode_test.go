@@ -17,6 +17,7 @@
 package model
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -79,6 +80,7 @@ func TestParse(t *testing.T) {
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
 			got, err := Parse(tc.src)
+			fmt.Println("got:", got)
 			if (err != nil) != tc.wantErr {
 				t.Errorf("test %s wantErr %v, got %v", tc.name, tc.wantErr, err)
 				return
@@ -102,6 +104,7 @@ func BenchmarkParse(b *testing.B) {
 			b.Error(err)
 			return
 		}
+		fmt.Println(got)
 		_ = got
 	}
 }

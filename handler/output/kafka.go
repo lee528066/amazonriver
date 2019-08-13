@@ -40,6 +40,7 @@ type kafkaMessage struct {
 	Table       string                 `json:"table"`
 	Operation   string                 `json:"operation"`
 	Data        map[string]interface{} `json:"data"`
+	OldData     map[string]interface{} `json:"oldData"`
 	OperateTime int64                  `json:"operateTime"`
 }
 
@@ -88,6 +89,7 @@ func fromData(data *model.WalData) (key []byte, topic string, msg *kafkaMessage)
 		Schema:      data.Schema,
 		Table:       data.Table,
 		Data:        data.Data,
+		OldData:     data.OldData,
 		Operation:   data.OperationType.String(),
 		OperateTime: data.Timestamp,
 	}

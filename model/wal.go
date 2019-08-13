@@ -28,6 +28,7 @@ type WalData struct {
 	Schema        string
 	Table         string
 	Data          map[string]interface{}
+	OldData       map[string]interface{}
 	Timestamp     int64
 	Pos           uint64
 	Rule          *conf.Rule
@@ -39,6 +40,7 @@ func (d *WalData) Reset() {
 	d.Schema = ""
 	d.Table = ""
 	d.Data = nil
+	d.OldData = nil
 	d.Timestamp = 0
 	d.Pos = 0
 	d.Rule = nil

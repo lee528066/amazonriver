@@ -95,6 +95,9 @@ bh_unicode_properties.cache
 # https://packagecontrol.io/packages/sublime-github
 GitHub.sublime-settings
 
+### Goland ###
+.idea
+
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json

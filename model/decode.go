@@ -60,6 +60,12 @@ func Parse(msg *pgx.WalMessage) (*WalData, error) {
 		ret.OperationType = Commit
 	}
 
+	parseColumns(result, ret)
+	parseOldColumns(result, ret)
+	return ret, nil
+}
+
+func parseColumns(result *parselogical.ParseResult, ret *WalData) {
 	if len(result.Columns) > 0 {
 		ret.Data = make(map[string]interface{}, len(result.Columns))
 	}
@@ -84,6 +90,31 @@ func Parse(msg *pgx.WalMessage) (*WalData, error) {
 		}
 		ret.Data[key] = column.Value
 	}
+}
 
-	return ret, nil
+func parseOldColumns(result *parselogical.ParseResult, ret *WalData) {
+	if len(result.OldColumns) > 0 {
+		ret.OldData = make(map[string]interface{}, len(result.OldColumns))
+	}
+	for key, column := range result.OldColumns {
+		if column.Quoted {
+			ret.OldData[key] = column.Value
+			continue
+		}
+
+		if column.Value == "null" {
+			ret.OldData[key] = nil
+			continue
+		}
+
+		if val, err := strconv.ParseInt(column.Value, 10, 64); err == nil {
+			ret.OldData[key] = val
+			continue
+		}
+		if val, err := strconv.ParseFloat(column.Value, 64); err == nil {
+			ret.OldData[key] = val
+			continue
+		}
+		ret.OldData[key] = column.Value
+	}
 }
